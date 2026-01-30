@@ -36,7 +36,7 @@ export default function Table({ data, onAction, className }: TableProps) {
   }
 
   return (
-    <div className={cn("w-full overflow-x-auto overflow-y-hidden rounded-lg border border-border -mx-4 sm:mx-0", className)}>
+    <div className={cn("w-full overflow-x-auto overflow-y-hidden rounded-lg border border-border sm:mx-0", className)}>
       <table className="w-full min-w-[640px] caption-bottom text-sm">
         <thead>
           <tr className="border-b border-border bg-muted/50 transition-colors hover:bg-muted/50">
