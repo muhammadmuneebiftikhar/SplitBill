@@ -17,7 +17,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className="bg-background text-foreground"
     >
-      <body>
+      <body suppressHydrationWarning>
         <ThemeProvider>
           {children}
         </ThemeProvider>

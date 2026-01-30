@@ -1,7 +1,8 @@
 "use client"
 
-import AddExpense from "@/components/layout/AddExpense";
-import Table from "@/components/layout/table"
+import AddExpense, { type NewExpenseData } from "@/components/layout/AddExpense";
+import Table from "@/components/layout/table";
+import { useState } from "react";
 
 export interface ExpenseRow {
   id: string;
@@ -83,16 +84,35 @@ const onAction = (row: ExpenseRow) => {
   console.log("Action for", row);
 };
 
+function generateId() {
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
 export default function ExpensesPage() {
-  
+  const [expenses, setExpenses] = useState<ExpenseRow[]>(defaultData);
+
+  function handleAddExpense(data: NewExpenseData) {
+    const newRow: ExpenseRow = {
+      id: generateId(),
+      date: data.date,
+      paidBy: data.paidBy,
+      description: data.description,
+      group: Array.isArray(data.group) ? data.group.join(", ") : data.group,
+      amountPaid: data.amountPaid,
+      receivable: 0,
+    };
+    setExpenses((prev) => [newRow, ...prev]);
+  }
+
   return (
     <>
-      <h2 className="text-2xl font-bold mb-5">Expenses</h2>
-      <div className="flex justify-end mb-5">
-        <AddExpense />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
+        <h2 className="text-xl sm:text-2xl font-bold">Expenses</h2>
+        <div className="w-full sm:w-auto">
+          <AddExpense onAddExpense={handleAddExpense} />
+        </div>
       </div>
-      <Table data={defaultData} onAction={onAction} />
-
+      <Table data={expenses} onAction={onAction} />
     </>
   )
 }

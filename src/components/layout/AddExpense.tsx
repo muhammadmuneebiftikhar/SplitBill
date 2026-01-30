@@ -8,20 +8,54 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ComboboxMultiple } from "@/components/ui/multiSelect";
 
-export default function AddExpense() {
+export interface NewExpenseData {
+  date: string;
+  paidBy: string;
+  description: string;
+  group: string | string[];
+  amountPaid: number;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+interface AddExpenseProps {
+  onAddExpense?: (data: NewExpenseData) => void;
+}
+
+const defaultUsers: User[] = [
+  { id: "1", name: "Muneeb", email: "muneeb@gmail.com" },
+  { id: "2", name: "Naveed", email: "naveed@gmail.com" },
+  { id: "3", name: "Alamgeer", email: "alamgeer@gmail.com" },
+  { id: "4", name: "Rohaan", email: "rohaan@gmail.com" },
+];
+
+const initialFormData: NewExpenseData = {
+  date: "",
+  paidBy: "",
+  description: "",
+  group: [],
+  amountPaid: 0,
+};
+
+export default function AddExpense({ onAddExpense }: AddExpenseProps) {
   const [addExpenseOpen, setAddExpenseOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    date: "",
-    paidBy: "",
-    description: "",
-    group: "",
-    amountPaid: 0,
-  });
+  const [formData, setFormData] = useState<NewExpenseData>(initialFormData);
+
+  const selectedGroup = Array.isArray(formData.group)
+    ? formData.group
+    : formData.group
+    ? [formData.group]
+    : [];
 
   return (
     <>
-      <Button size="sm" onClick={() => setAddExpenseOpen(true)}>
+      <Button size="sm" className="w-full sm:w-auto" onClick={() => setAddExpenseOpen(true)}>
         Add Expense
       </Button>
 
@@ -37,12 +71,9 @@ export default function AddExpense() {
             className="grid gap-4 py-4"
             onSubmit={(e) => {
               e.preventDefault();
-              console.log("Form submitted");
-              console.log("Date:", formData.date);
-              console.log("Paid by:", formData.paidBy);
-              console.log("Description:", formData.description);
-              console.log("Group:", formData.group);
-              console.log("Amount:", formData.amountPaid);
+              if (selectedGroup.length === 0) return;
+              onAddExpense?.({ ...formData, group: selectedGroup });
+              setFormData(initialFormData);
               setAddExpenseOpen(false);
             }}
           >
@@ -54,7 +85,9 @@ export default function AddExpense() {
                 id="date"
                 type="date"
                 value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, date: e.target.value })
+                }
                 className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 required
               />
@@ -67,7 +100,9 @@ export default function AddExpense() {
                 id="paidBy"
                 type="text"
                 value={formData.paidBy}
-                onChange={(e) => setFormData({ ...formData, paidBy: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, paidBy: e.target.value })
+                }
                 placeholder="Name"
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 required
@@ -81,7 +116,9 @@ export default function AddExpense() {
                 id="description"
                 type="text"
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 placeholder="e.g. Dinner at restaurant"
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 required
@@ -89,16 +126,15 @@ export default function AddExpense() {
             </div>
             <div className="grid gap-2">
               <label htmlFor="group" className="text-sm font-medium">
-                Group
+                Group (select users to split with)
               </label>
-              <input
-                id="group"
-                type="text"
-                value={formData.group}
-                onChange={(e) => setFormData({ ...formData, group: e.target.value })}
-                placeholder="e.g. Naveed, Alamgeer, Rohaan"
-                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                required
+              <ComboboxMultiple
+                items={defaultUsers.map((u) => u.name)}
+                value={selectedGroup}
+                onChange={(selected) =>
+                  setFormData({ ...formData, group: selected })
+                }
+                placeholder="Select users..."
               />
             </div>
             <div className="grid gap-2">
@@ -111,7 +147,12 @@ export default function AddExpense() {
                 step="0.01"
                 min="0"
                 value={formData.amountPaid}
-                onChange={(e) => setFormData({ ...formData, amountPaid: parseFloat(e.target.value) })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    amountPaid: parseFloat(e.target.value),
+                  })
+                }
                 placeholder="0.00"
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 required
@@ -125,7 +166,9 @@ export default function AddExpense() {
               >
                 Cancel
               </Button>
-              <Button type="submit">Add expense</Button>
+              <Button type="submit" disabled={selectedGroup.length === 0}>
+                Add expense
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>

@@ -58,18 +58,18 @@ const onAction = (row: ExpenseRow) => {
 export default function DashboardPage() {
   return (
     <>
-      <h2 className="text-2xl font-bold mb-5">Dashboard</h2>
-      <div className="mt-5 mb-5 border border-border rounded-lg p-5">
-        <div className="flex justify-between items-center">
+      <h2 className="text-xl sm:text-2xl font-bold mb-5">Dashboard</h2>
+      <div className="mt-5 mb-5 border border-border rounded-lg p-4 sm:p-5">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div className="flex items-center">
-              <div className="ml-2 text-red-500">
-              <h3 className="text-lg font-bold">Total Expenses</h3>
+            <div className="sm:ml-2 text-red-500">
+              <h3 className="text-base sm:text-lg font-bold">Total Expenses</h3>
               <p className="text-sm">1,000.00 AED</p>
             </div>
           </div>
           <div className="flex items-center">
-            <div className="ml-2 text-green-500">
-              <h3 className="text-lg font-bold">Total Receivables</h3>
+            <div className="sm:ml-2 text-green-500">
+              <h3 className="text-base sm:text-lg font-bold">Total Receivables</h3>
               <p className="text-sm">1,000.00 AED</p>
             </div>
           </div>

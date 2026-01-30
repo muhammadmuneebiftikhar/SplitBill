@@ -36,29 +36,29 @@ export default function Table({ data, onAction, className }: TableProps) {
   }
 
   return (
-    <div className={cn("w-full overflow-auto rounded-lg border border-border", className)}>
-      <table className="w-full caption-bottom text-sm">
+    <div className={cn("w-full overflow-x-auto overflow-y-hidden rounded-lg border border-border -mx-4 sm:mx-0", className)}>
+      <table className="w-full min-w-[640px] caption-bottom text-sm">
         <thead>
           <tr className="border-b border-border bg-muted/50 transition-colors hover:bg-muted/50">
-            <th className="h-11 px-4 text-left align-middle font-medium text-muted-foreground">
+            <th className="h-10 sm:h-11 px-2 sm:px-4 text-left align-middle font-medium text-muted-foreground text-xs sm:text-sm">
               Date
             </th>
-            <th className="h-11 px-4 text-left align-middle font-medium text-muted-foreground">
+            <th className="h-10 sm:h-11 px-2 sm:px-4 text-left align-middle font-medium text-muted-foreground text-xs sm:text-sm">
               Paid by
             </th>
-            <th className="h-11 px-4 text-left align-middle font-medium text-muted-foreground">
+            <th className="h-10 sm:h-11 px-2 sm:px-4 text-left align-middle font-medium text-muted-foreground text-xs sm:text-sm min-w-[100px]">
               Description
             </th>
-            <th className="h-11 px-4 text-left align-middle font-medium text-muted-foreground">
+            <th className="h-10 sm:h-11 px-2 sm:px-4 text-left align-middle font-medium text-muted-foreground text-xs sm:text-sm min-w-[80px]">
               Group
             </th>
-            <th className="h-11 px-4 text-right align-middle font-medium text-muted-foreground">
+            <th className="h-10 sm:h-11 px-2 sm:px-4 text-right align-middle font-medium text-muted-foreground text-xs sm:text-sm">
               Amount paid
             </th>
-            <th className="h-11 px-4 text-right align-middle font-medium text-muted-foreground">
+            <th className="h-10 sm:h-11 px-2 sm:px-4 text-right align-middle font-medium text-muted-foreground text-xs sm:text-sm">
               Receivable
             </th>
-            <th className="h-11 px-4 text-right align-middle font-medium text-muted-foreground w-[100px]">
+            <th className="h-10 sm:h-11 px-2 sm:px-4 text-right align-middle font-medium text-muted-foreground text-xs sm:text-sm w-[80px] sm:w-[100px]">
               Action
             </th>
           </tr>
@@ -69,26 +69,27 @@ export default function Table({ data, onAction, className }: TableProps) {
               key={row.id}
               className="border-b border-border transition-colors hover:bg-muted/30"
             >
-              <td className="p-4 align-middle">{formatDate(row.date)}</td>
-              <td className="p-4 align-middle font-medium">{row.paidBy}</td>
-              <td className="p-4 align-middle text-muted-foreground">{row.description}</td>
-              <td className="p-4 align-middle font-medium">{row.group}</td>
-              <td className="p-4 text-right align-middle font-medium">
+              <td className="p-2 sm:p-4 align-middle text-xs sm:text-sm whitespace-nowrap">{formatDate(row.date)}</td>
+              <td className="p-2 sm:p-4 align-middle font-medium text-xs sm:text-sm">{row.paidBy}</td>
+              <td className="p-2 sm:p-4 align-middle text-muted-foreground text-xs sm:text-sm max-w-[120px] sm:max-w-none truncate sm:overflow-visible sm:whitespace-normal" title={row.description}>{row.description}</td>
+              <td className="p-2 sm:p-4 align-middle font-medium text-xs sm:text-sm max-w-[80px] sm:max-w-none truncate sm:overflow-visible sm:whitespace-normal" title={row.group}>{row.group}</td>
+              <td className="p-2 sm:p-4 text-right align-middle font-medium text-xs sm:text-sm whitespace-nowrap">
                 {formatCurrency(row.amountPaid)}
               </td>
               <td
                 className={cn(
-                  "p-4 text-right align-middle font-medium",
+                  "p-2 sm:p-4 text-right align-middle font-medium text-xs sm:text-sm whitespace-nowrap",
                   row.receivable >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
                 )}
               >
                 {row.receivable >= 0 ? "+" : ""}
                 {formatCurrency(row.receivable)}
               </td>
-              <td className="p-4 text-right align-middle">
+              <td className="p-2 sm:p-4 text-right align-middle">
                 <Button
                   variant="outline"
                   size="sm"
+                  className="text-xs sm:text-sm"
                   onClick={() => onAction?.(row)}
                 >
                   Actions
