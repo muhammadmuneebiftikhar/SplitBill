@@ -60,7 +60,20 @@ export default function DashboardPage() {
     <>
       <h2 className="text-2xl font-bold mb-5">Dashboard</h2>
       <div className="mt-5 mb-5 border border-border rounded-lg p-5">
-        
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+              <div className="ml-2 text-red-500">
+              <h3 className="text-lg font-bold">Total Expenses</h3>
+              <p className="text-sm">1,000.00 AED</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <div className="ml-2 text-green-500">
+              <h3 className="text-lg font-bold">Total Receivables</h3>
+              <p className="text-sm">1,000.00 AED</p>
+            </div>
+          </div>
+        </div>
       </div>
       <Table data={defaultData} onAction={onAction} />
     </>
