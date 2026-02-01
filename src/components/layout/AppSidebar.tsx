@@ -30,14 +30,14 @@ const menuItems = [
     icon: LayoutDashboard,
   },
   {
-    title: "Groups",
-    href: "/groups",
-    icon: Users,
-  },
-  {
     title: "Expenses",
     href: "/expenses",
     icon: Receipt,
+  },
+  {
+    title: "Friends",
+    href: "/friends",
+    icon: Users,
   },
 ]
 

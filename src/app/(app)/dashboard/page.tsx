@@ -1,6 +1,7 @@
 "use client";
 
 import Table from "@/components/layout/table";
+import { useState } from "react";
 
 export interface ExpenseRow {
   id: string;
@@ -51,11 +52,9 @@ const defaultData: ExpenseRow[] = [
   },
 ];
 
-const onAction = (row: ExpenseRow) => {
-  console.log("Action for", row);
-};
-
 export default function DashboardPage() {
+  const [expenses, setExpenses] = useState<ExpenseRow[]>(defaultData);
+  
   return (
     <>
       <h2 className="text-xl sm:text-2xl font-bold mb-5">Dashboard</h2>
@@ -75,7 +74,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      <Table data={defaultData} onAction={onAction} />
+      <Table data={expenses} title="Expenses" onDataChange={setExpenses} />
     </>
   );
 }

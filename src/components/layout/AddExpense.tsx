@@ -24,8 +24,17 @@ export interface User {
   email: string;
 }
 
+export interface EditExpenseData extends NewExpenseData {
+  id: string;
+}
+
 interface AddExpenseProps {
   onAddExpense?: (data: NewExpenseData) => void;
+  onEditExpense?: (id: string, data: NewExpenseData) => void;
+  action: "add" | "edit";
+  editData: EditExpenseData | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 const defaultUsers: User[] = [
@@ -43,9 +52,27 @@ const initialFormData: NewExpenseData = {
   amountPaid: 0,
 };
 
-export default function AddExpense({ onAddExpense }: AddExpenseProps) {
-  const [addExpenseOpen, setAddExpenseOpen] = useState(false);
-  const [formData, setFormData] = useState<NewExpenseData>(initialFormData);
+function getFormDataFromEdit(editData: EditExpenseData | null): NewExpenseData {
+  if (!editData) return initialFormData;
+  const group =
+    Array.isArray(editData.group)
+      ? editData.group
+      : typeof editData.group === "string"
+        ? editData.group.split(",").map((s) => s.trim()).filter(Boolean)
+        : [];
+  return {
+    date: editData.date,
+    paidBy: editData.paidBy,
+    description: editData.description,
+    group,
+    amountPaid: editData.amountPaid,
+  };
+}
+
+export default function AddExpense({ onAddExpense, onEditExpense, action, editData, open, onOpenChange }: AddExpenseProps) {
+  const [formData, setFormData] = useState<NewExpenseData>(() =>
+    action === "edit" && editData ? getFormDataFromEdit(editData) : initialFormData
+  );
 
   const selectedGroup = Array.isArray(formData.group)
     ? formData.group
@@ -55,16 +82,12 @@ export default function AddExpense({ onAddExpense }: AddExpenseProps) {
 
   return (
     <>
-      <Button size="sm" className="w-full sm:w-auto" onClick={() => setAddExpenseOpen(true)}>
-        Add Expense
-      </Button>
-
-      <Dialog open={addExpenseOpen} onOpenChange={setAddExpenseOpen}>
+      <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add expense</DialogTitle>
+            <DialogTitle>{action === "add" ? "Add expense" : "Edit expense"}</DialogTitle>
             <DialogDescription>
-              Add a new expense. Fill in the details below.
+              {action === "add" ? "Add a new expense. Fill in the details below." : "Edit the expense. Fill in the details below."}
             </DialogDescription>
           </DialogHeader>
           <form
@@ -72,9 +95,14 @@ export default function AddExpense({ onAddExpense }: AddExpenseProps) {
             onSubmit={(e) => {
               e.preventDefault();
               if (selectedGroup.length === 0) return;
-              onAddExpense?.({ ...formData, group: selectedGroup });
+              const payload = { ...formData, group: selectedGroup };
+              if (action === "edit" && editData?.id) {
+                onEditExpense?.(editData.id, payload);
+              } else {
+                onAddExpense?.(payload);
+              }
               setFormData(initialFormData);
-              setAddExpenseOpen(false);
+              onOpenChange(false);
             }}
           >
             <div className="grid gap-2">
@@ -144,8 +172,7 @@ export default function AddExpense({ onAddExpense }: AddExpenseProps) {
               <input
                 id="amount"
                 type="number"
-                step="0.01"
-                min="0"
+                min="1"
                 value={formData.amountPaid}
                 onChange={(e) =>
                   setFormData({
@@ -162,12 +189,12 @@ export default function AddExpense({ onAddExpense }: AddExpenseProps) {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setAddExpenseOpen(false)}
+                onClick={() => onOpenChange(false)}
               >
                 Cancel
               </Button>
               <Button type="submit" disabled={selectedGroup.length === 0}>
-                Add expense
+                {action === "add" ? "Add expense" : "Edit expense"}
               </Button>
             </DialogFooter>
           </form>
