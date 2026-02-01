@@ -1,6 +1,6 @@
 "use client";
 
-import Table from "@/components/layout/table";
+import Table from "@/components/layout/ExpenseTable";
 import { useState } from "react";
 
 export interface ExpenseRow {
@@ -54,10 +54,11 @@ const defaultData: ExpenseRow[] = [
 
 export default function DashboardPage() {
   const [expenses, setExpenses] = useState<ExpenseRow[]>(defaultData);
-  
+
   return (
     <>
       <h2 className="text-xl sm:text-2xl font-bold mb-5">Dashboard</h2>
+      {/* Total Expenses and Total Receivables */}
       <div className="mt-5 mb-5 border border-border rounded-lg p-4 sm:p-5">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div className="flex items-center">
@@ -68,12 +69,58 @@ export default function DashboardPage() {
           </div>
           <div className="flex items-center">
             <div className="sm:ml-2 text-green-500">
-              <h3 className="text-base sm:text-lg font-bold">Total Receivables</h3>
-              <p className="text-sm">1,000.00 AED</p>
+              <h3 className="text-base sm:text-lg font-bold">
+                Total Receivables
+              </h3>
+              <p className="text-sm">7,00.00 AED</p>
             </div>
           </div>
         </div>
       </div>
+      {/* Friends List with their total expenses and receivables */}
+      <div className="flex items-center gap-4 mt-5 mb-5">
+        <div className="border border-border rounded-lg p-4 sm:p-5 w-1/4">
+          <h3 className="text-base sm:text-lg font-bold mb-2">Rohaan</h3>
+          <div className="flex items-center justify-between gap-2">
+            <div className="text-red-500">
+              <p className="text-sm">Payable</p>
+              <p className="text-sm">100.00 AED</p>
+            </div>
+            <div className="text-green-500">
+              <p className="text-sm">Owed to you</p>
+              <p className="text-sm">10.00 AED</p>
+            </div>
+          </div>
+        </div>
+        <div className="border border-border rounded-lg p-4 sm:p-5 w-1/4">
+        <h3 className="text-base sm:text-lg font-bold mb-2">Alamgeer</h3>
+          <div className="flex items-center justify-between gap-2">
+            <div className="text-red-500">
+              <p className="text-sm">Payable</p>
+              <p className="text-sm">100.00 AED</p>
+            </div>
+            <div className="text-green-500">
+              <p className="text-sm">Owed to you</p>
+              <p className="text-sm">10.00 AED</p>
+            </div>
+          </div>
+        </div>
+        <div className="border border-border rounded-lg p-4 sm:p-5 w-1/4">
+        <h3 className="text-base sm:text-lg font-bold mb-2">Naveed</h3>
+          <div className="flex items-center justify-between gap-2">
+            <div className="text-red-500">
+              <p className="text-sm">Payable</p>
+              <p className="text-sm">100.00 AED</p>
+            </div>
+            <div className="text-green-500">
+              <p className="text-sm">Owed to you</p>
+              <p className="text-sm">10.00 AED</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Expenses Table */}
       <Table data={expenses} title="Expenses" onDataChange={setExpenses} />
     </>
   );

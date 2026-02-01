@@ -1,6 +1,6 @@
 "use client"
 
-import Table, { type ExpenseRow } from "@/components/layout/table";
+import Table, { type ExpenseRow } from "@/components/layout/ExpenseTable";
 import { useState } from "react";
 
 const defaultData: ExpenseRow[] = [
